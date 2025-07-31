@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-black text-white">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trading Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Animated Gradient Background with Stars */
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      opacity: 0.2;
+      z-index: -1;
+    }
+
+    .glass {
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body class="relative min-h-screen text-white">
+
+  <!-- Blur Overlay -->
+  <div id="overlayBlur" class="fixed inset-0 z-20 bg-black/30 backdrop-blur-sm hidden"></div>
+
+  <!-- Top Section -->
+  <div class="p-4 flex justify-between items-center">
+    <!-- Coin Dropdown -->
+    <div class="relative">
+      <button onclick="toggleDropdown()" class="px-4 py-2 glass rounded-lg">
+        <span id="selectedCoin">BTC/USDT</span> ▼
+      </button>
+      <div id="dropdownMenu" class="absolute mt-2 w-40 glass rounded-lg shadow-md hidden z-50">
+        <ul>
+          <li onclick="selectCoin('ETH/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">ETH/USDT</li>
+          <li onclick="selectCoin('BNB/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">BNB/USDT</li>
+          <li onclick="selectCoin('DOGE/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">DOGE/USDT</li>
+          <li onclick="selectCoin('ADA/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">ADA/USDT</li>
+          <li onclick="selectCoin('XRP/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">XRP/USDT</li>
+          <li onclick="selectCoin('DOT/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">DOT/USDT</li>
+          <li onclick="selectCoin('SOL/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">SOL/USDT</li>
+          <li onclick="selectCoin('TRX/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">TRX/USDT</li>
+          <li onclick="selectCoin('LTC/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">LTC/USDT</li>
+          <li onclick="selectCoin('SHIB/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">SHIB/USDT</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Trade Record -->
+    <button class="px-4 py-2 glass rounded-lg">Trade Record</button>
+  </div>
+
+  <!-- Long Button (bottom-right) -->
+  <div class="fixed bottom-24 right-4 z-40">
+    <button id="openLong" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full shadow-lg">
+      Long
+    </button>
+  </div>
+
+  <!-- Half Screen Modal -->
+  <div id="longModal" class="fixed bottom-0 left-0 w-full h-1/2 glass border-t border-white/10 z-30 rounded-t-2xl hidden p-4">
+    <h2 class="text-xl font-bold mb-4">Open Long Position</h2>
+    <!-- Time Options -->
+    <div class="flex gap-2 mb-4">
+      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">60s</button>
+      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">90s</button>
+      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">120s</button>
+      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">240s</button>
+      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">300s</button>
+    </div>
+    <input type="number" placeholder="Enter amount" class="w-full p-2 rounded-md glass mb-4 text-white placeholder-gray-300"/>
+    <button id="closeLong" class="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md">
+      Close
+    </button>
+  </div>
+
+  <!-- Bottom Navigation Bar with Glass Effect -->
+  <nav class="fixed bottom-0 left-0 right-0 glass text-white z-50 border-t border-gray-700">
+    <div class="flex justify-around items-center text-center text-xs py-3">
+      <a href="home.html" class="flex flex-col items-center hover:text-green-400">
+        <svg class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        </svg>
+        <span>Home</span>
+      </a>
+
+      <a href="profile.html" class="flex flex-col items-center hover:text-green-400">
+        <svg class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 0112 3v0a9 9 0 016.879 14.804M15 21h.01"/>
+        </svg>
+        <span>Profile</span>
+      </a>
+
+      <a href="trading.html" class="flex flex-col items-center text-green-400">
+        <svg class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6h5V9H4v8h5z"/>
+        </svg>
+        <span>Trading</span>
+      </a>
+
+      <a href="record.html" class="flex flex-col items-center hover:text-green-400">
+        <svg class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+        </svg>
+        <span>Record</span>
+      </a>
+
+      <a href="wallet.html" class="flex flex-col items-center hover:text-green-400">
+        <svg class="h-5 w-5 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a4 4 0 00-8 0v2H5v11h14V9h-2z"/>
+        </svg>
+        <span>Wallet</span>
+      </a>
+    </div>
+  </nav>
+
+  <script>
+    function toggleDropdown() {
+      document.getElementById('dropdownMenu').classList.toggle('hidden');
+    }
+
+    function selectCoin(coin) {
+      document.getElementById('selectedCoin').innerText = coin;
+      toggleDropdown();
+    }
+
+    window.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('dropdownMenu');
+      if (!e.target.closest('.relative')) {
+        dropdown.classList.add('hidden');
+      }
+    });
+
+    const modal = document.getElementById('longModal');
+    const overlay = document.getElementById('overlayBlur');
+    const openBtn = document.getElementById('openLong');
+    const closeBtn = document.getElementById('closeLong');
+
+    openBtn.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+      overlay.classList.remove('hidden');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      overlay.classList.add('hidden');
+    });
+
+    overlay.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      overlay.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
