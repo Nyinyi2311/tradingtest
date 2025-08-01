@@ -35,6 +35,25 @@
       backdrop-filter: blur(12px);
       background: rgba(255, 255, 255, 0.05);
     }
+
+    /* For responsive button sizes */
+    @media (max-width: 640px) {
+      #longButtonContainer button,
+      #shortButtonContainer button {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        font-size: 1rem;
+        width: 6.5rem;
+      }
+      #longButtonContainer {
+        bottom: 5.5rem; /* a bit above nav */
+        right: 1rem;
+      }
+      #shortButtonContainer {
+        bottom: 5.5rem;
+        left: 1rem;
+      }
+    }
   </style>
 </head>
 <body class="relative min-h-screen text-white">
@@ -51,45 +70,85 @@
       </button>
       <div id="dropdownMenu" class="absolute mt-2 w-40 glass rounded-lg shadow-md hidden z-50">
         <ul>
-          <li onclick="selectCoin('ETH/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">ETH/USDT</li>
-          <li onclick="selectCoin('BNB/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">BNB/USDT</li>
-          <li onclick="selectCoin('DOGE/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">DOGE/USDT</li>
-          <li onclick="selectCoin('ADA/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">ADA/USDT</li>
-          <li onclick="selectCoin('XRP/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">XRP/USDT</li>
-          <li onclick="selectCoin('DOT/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">DOT/USDT</li>
-          <li onclick="selectCoin('SOL/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">SOL/USDT</li>
-          <li onclick="selectCoin('TRX/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">TRX/USDT</li>
-          <li onclick="selectCoin('LTC/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">LTC/USDT</li>
-          <li onclick="selectCoin('SHIB/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer">SHIB/USDT</li>
+          <li onclick="selectCoin('BTC/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">BTC/USDT</li>
+          <li onclick="selectCoin('ETH/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">ETH/USDT</li>
+          <li onclick="selectCoin('SOL/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">SOL/USDT</li>
+          <li onclick="selectCoin('BNB/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">BNB/USDT</li>
+          <li onclick="selectCoin('XRP/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">XRP/USDT</li>
+          <li onclick="selectCoin('ADA/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">ADA/USDT</li>
+          <li onclick="selectCoin('DOGE/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">DOGE/USDT</li>
+          <li onclick="selectCoin('DOT/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">DOT/USDT</li>
+          <li onclick="selectCoin('LTC/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">LTC/USDT</li>
+          <li onclick="selectCoin('AVAX/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">AVAX/USDT</li>
+          <li onclick="selectCoin('LINK/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">LINK/USDT</li>
+          <li onclick="selectCoin('BTC/USD')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">BTC/USD</li>
         </ul>
       </div>
     </div>
 
-    <!-- Trade Record -->
-    <button class="px-4 py-2 glass rounded-lg">Trade Record</button>
+    <a href="record.html" class="flex flex-col items-center hover:text-green-400">
+      <!-- Heroicon: Document Text -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12h6M9 16h6M8 4h8l4 4v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z" />
+      </svg>
+      <span>Record</span>
+    </a>
   </div>
 
   <!-- Long Button (bottom-right) -->
-  <div class="fixed bottom-24 right-4 z-40">
-    <button id="openLong" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full shadow-lg">
+  <div id="longButtonContainer" class="fixed bottom-24 right-4 z-40">
+    <button id="openLong" class="bg-green-500 hover:bg-green-600 text-white px-9 py-3 rounded-full shadow-lg">
       Long
     </button>
   </div>
 
+  <!-- Short Button (bottom-left) -->
+  <div id="shortButtonContainer" class="fixed bottom-24 left-4 z-40">
+    <button id="openShort" class="bg-red-600 hover:bg-red-700 text-white px-9 py-3 rounded-full shadow-lg">
+      Short
+    </button>
+  </div>
+
   <!-- Half Screen Modal -->
-  <div id="longModal" class="fixed bottom-0 left-0 w-full h-1/2 glass border-t border-white/10 z-30 rounded-t-2xl hidden p-4">
-    <h2 class="text-xl font-bold mb-4">Open Long Position</h2>
-    <!-- Time Options -->
-    <div class="flex gap-2 mb-4">
-      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">60s</button>
-      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">90s</button>
-      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">120s</button>
-      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">240s</button>
-      <button class="bg-white/10 px-3 py-1 rounded-md hover:bg-white/20">300s</button>
+  <div id="longModal" class="fixed bottom-0 left-0 w-full h-2/3 glass border-t border-white/10 z-50 rounded-t-2xl hidden p-4 text-white backdrop-blur-lg overflow-auto">
+
+    <!-- Close Icon (top-right) -->
+    <div class="flex justify-between items-center mb-2">
+      <h2 id="modalTitle" class="text-xl font-bold">Open Long Position</h2>
+      <button id="closeLong" class="text-white text-xl px-2">&times;</button>
     </div>
-    <input type="number" placeholder="Enter amount" class="w-full p-2 rounded-md glass mb-4 text-white placeholder-gray-300"/>
-    <button id="closeLong" class="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md">
-      Close
+
+    <!-- Balance & Coin Info -->
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-sm text-green-400 font-semibold">
+        Balance: <span id="userBalance">1200</span> USDT
+      </div>
+      <div class="text-sm text-yellow-400">
+        Price: <span id="coinPrice">$29,837.25</span>
+      </div>
+    </div>
+
+    <!-- Time Options -->
+    <div class="flex gap-2 mb-4 overflow-x-auto" id="timeOptions">
+      <button onclick="selectTime(this)" class="time-btn bg-white/10 px-4 py-2 rounded-md hover:bg-white/20 text-gray-300">60s</button>
+      <button onclick="selectTime(this)" class="time-btn bg-white/10 px-4 py-2 rounded-md hover:bg-white/20 text-gray-300">90s</button>
+      <button onclick="selectTime(this)" class="time-btn bg-white/10 px-4 py-2 rounded-md hover:bg-white/20 text-gray-300">120s</button>
+      <button onclick="selectTime(this)" class="time-btn bg-white/10 px-4 py-2 rounded-md hover:bg-white/20 text-gray-300">240s</button>
+      <button onclick="selectTime(this)" class="time-btn bg-white/10 px-4 py-2 rounded-md hover:bg-white/20 text-gray-300">300s</button>
+    </div>
+
+    <!-- Amount Input -->
+    <input type="number" placeholder="Enter amount" class="w-full p-3 rounded-md glass mb-2 text-white placeholder-gray-400"/>
+
+    <!-- Selected Coin Name (below input) -->
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-lg font-semibold text-green-400" id="modalCoinName">BTC/USDT</div>
+    </div>
+
+    <!-- Submit Button -->
+    <button id="submitTrade" class="w-full bg-green-500 hover:bg-green-600 py-3 rounded-md text-white font-semibold">
+      Submit
     </button>
   </div>
 
@@ -134,41 +193,76 @@
   </nav>
 
   <script>
+    // Dropdown functions
     function toggleDropdown() {
-      document.getElementById('dropdownMenu').classList.toggle('hidden');
+      const menu = document.getElementById('dropdownMenu');
+      const selectedText = document.getElementById('selectedCoin');
+      menu.classList.toggle('hidden');
+      selectedText.classList.toggle('text-green-400');
     }
 
     function selectCoin(coin) {
       document.getElementById('selectedCoin').innerText = coin;
-      toggleDropdown();
+      document.getElementById('dropdownMenu').classList.add('hidden');
+      document.getElementById('selectedCoin').classList.remove('text-green-400');
+
+      // Update modal coin name
+      const modalCoinName = document.getElementById('modalCoinName');
+      if (modalCoinName) {
+        modalCoinName.textContent = coin;
+      }
     }
 
-    window.addEventListener('click', (e) => {
-      const dropdown = document.getElementById('dropdownMenu');
-      if (!e.target.closest('.relative')) {
-        dropdown.classList.add('hidden');
+    window.addEventListener('click', function (e) {
+      const dropdownButton = e.target.closest("button[onclick='toggleDropdown()']");
+      const dropdownMenu = document.getElementById('dropdownMenu');
+
+      if (!dropdownButton && !e.target.closest('#dropdownMenu')) {
+        dropdownMenu.classList.add('hidden');
+        document.getElementById('selectedCoin').classList.remove('text-green-400');
       }
     });
 
+    // Modal open/close handlers
     const modal = document.getElementById('longModal');
     const overlay = document.getElementById('overlayBlur');
-    const openBtn = document.getElementById('openLong');
+    const openLongBtn = document.getElementById('openLong');
+    const openShortBtn = document.getElementById('openShort');
     const closeBtn = document.getElementById('closeLong');
+    const longBtnContainer = document.getElementById('longButtonContainer');
+    const shortBtnContainer = document.getElementById('shortButtonContainer');
+    const modalTitle = document.getElementById('modalTitle');
 
-    openBtn.addEventListener('click', () => {
+    function openModal(type) {
       modal.classList.remove('hidden');
       overlay.classList.remove('hidden');
-    });
+      longBtnContainer.classList.add('hidden');
+      shortBtnContainer.classList.add('hidden');
+      modalTitle.textContent = type === 'long' ? 'Open Long Position' : 'Open Short Position';
+    }
 
-    closeBtn.addEventListener('click', () => {
+    function closeModal() {
       modal.classList.add('hidden');
       overlay.classList.add('hidden');
-    });
+      longBtnContainer.classList.remove('hidden');
+      shortBtnContainer.classList.remove('hidden');
+    }
 
-    overlay.addEventListener('click', () => {
-      modal.classList.add('hidden');
-      overlay.classList.add('hidden');
-    });
+    openLongBtn.addEventListener('click', () => openModal('long'));
+    openShortBtn.addEventListener('click', () => openModal('short'));
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+
+    // Time selection logic
+    function selectTime(el) {
+      const buttons = document.querySelectorAll('.time-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-green-500', 'text-white');
+        btn.classList.add('bg-white/10', 'text-gray-300');
+      });
+      el.classList.remove('bg-white/10', 'text-gray-300');
+      el.classList.add('bg-green-500', 'text-white');
+    }
   </script>
 </body>
 </html>
