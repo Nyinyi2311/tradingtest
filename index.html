@@ -30,6 +30,12 @@
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
+    /* Time buttons */
+    .time-btn {
+      transition: background-color 0.3s, color 0.3s;
+      cursor: pointer;
+      user-select: none;
+    }
   </style>
 </head>
 <body class="relative min-h-screen text-white">
@@ -44,7 +50,7 @@
       <button onclick="toggleDropdown()" class="px-4 py-2 glass rounded-lg z-40">
         <span id="selectedCoin">BTC/USDT</span> ▼
       </button>
-      <div id="dropdownMenu" class="absolute mt-2 w-40 glass rounded-lg shadow-md hidden z-50">
+      <div id="dropdownMenu" class="absolute mt-2 w-40 glass rounded-lg shadow-md hidden z-50 max-h-60 overflow-auto">
         <ul>
           <li onclick="selectCoin('BTC/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">BTC/USDT</li>
           <li onclick="selectCoin('ETH/USDT')" class="px-4 py-2 hover:bg-white/10 cursor-pointer hover:text-green-400">ETH/USDT</li>
@@ -168,7 +174,7 @@
   </nav>
 
   <script>
-    // Utility to format coin from URL param
+    // Format coin from URL param
     function formatCoin(c) {
       if (!c) return 'BTC/USDT';
       c = c.toUpperCase();
