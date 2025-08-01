@@ -6,53 +6,29 @@
   <title>Trading Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Animated Gradient Background with Stars */
     body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      background: linear-gradient(-45deg, #0f172a, #1e293b, #3b0764, #111827);
       background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      position: relative;
-      overflow-x: hidden;
+      animation: gradientMove 15s ease infinite;
     }
-
-    @keyframes gradientBG {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-
-    body::after {
-      content: '';
+    body::before {
+      content: "";
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       background: url('https://www.transparenttextures.com/patterns/stardust.png');
-      opacity: 0.2;
-      z-index: -1;
+      opacity: 0.05;
+      z-index: 0;
     }
-
     .glass {
-      backdrop-filter: blur(12px);
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    /* For responsive button sizes */
-    @media (max-width: 640px) {
-      #longButtonContainer button,
-      #shortButtonContainer button {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-        font-size: 1rem;
-        width: 6.5rem;
-      }
-      #longButtonContainer {
-        bottom: 5.5rem; /* a bit above nav */
-        right: 1rem;
-      }
-      #shortButtonContainer {
-        bottom: 5.5rem;
-        left: 1rem;
-      }
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
   </style>
 </head>
@@ -62,10 +38,10 @@
   <div id="overlayBlur" class="fixed inset-0 z-20 bg-black/30 backdrop-blur-sm hidden"></div>
 
   <!-- Top Section -->
-  <div class="p-4 flex justify-between items-center">
+  <div class="p-4 flex justify-between items-center z-30 relative">
     <!-- Coin Dropdown -->
     <div class="relative">
-      <button onclick="toggleDropdown()" class="px-4 py-2 glass rounded-lg">
+      <button onclick="toggleDropdown()" class="px-4 py-2 glass rounded-lg z-40">
         <span id="selectedCoin">BTC/USDT</span> ▼
       </button>
       <div id="dropdownMenu" class="absolute mt-2 w-40 glass rounded-lg shadow-md hidden z-50">
@@ -86,8 +62,7 @@
       </div>
     </div>
 
-    <a href="record.html" class="flex flex-col items-center hover:text-green-400">
-      <!-- Heroicon: Document Text -->
+    <a href="record.html" class="flex flex-col items-center hover:text-green-400 z-40">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M9 12h6M9 16h6M8 4h8l4 4v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z" />
@@ -119,13 +94,13 @@
       <button id="closeLong" class="text-white text-xl px-2">&times;</button>
     </div>
 
-    <!-- Balance & Coin Info -->
+    <!-- Balance and Price -->
     <div class="flex justify-between items-center mb-4">
       <div class="text-sm text-green-400 font-semibold">
-        Balance: <span id="userBalance">1200</span> USDT
+        Balance: <span id="userBalance">$ 0.00</span> USDT
       </div>
       <div class="text-sm text-yellow-400">
-        Price: <span id="coinPrice">$29,837.25</span>
+        Price: <span id="coinPrice">$0.00</span>
       </div>
     </div>
 
@@ -141,7 +116,7 @@
     <!-- Amount Input -->
     <input type="number" placeholder="Enter amount" class="w-full p-3 rounded-md glass mb-2 text-white placeholder-gray-400"/>
 
-    <!-- Selected Coin Name (below input) -->
+    <!-- Selected Coin Name -->
     <div class="flex justify-between items-center mb-4">
       <div class="text-lg font-semibold text-green-400" id="modalCoinName">BTC/USDT</div>
     </div>
@@ -152,7 +127,7 @@
     </button>
   </div>
 
-  <!-- Bottom Navigation Bar with Glass Effect -->
+  <!-- Bottom Navigation Bar -->
   <nav class="fixed bottom-0 left-0 right-0 glass text-white z-50 border-t border-gray-700">
     <div class="flex justify-around items-center text-center text-xs py-3">
       <a href="home.html" class="flex flex-col items-center hover:text-green-400">
@@ -193,7 +168,36 @@
   </nav>
 
   <script>
-    // Dropdown functions
+    // Utility to format coin from URL param
+    function formatCoin(c) {
+      if (!c) return 'BTC/USDT';
+      c = c.toUpperCase();
+      if (c === 'ETHUSDT') return 'ETH/USDT';
+      if (c === 'BTCUSDT') return 'BTC/USDT';
+      if (c === 'SOLUSDT') return 'SOL/USDT';
+      if (c === 'BNBUSDT') return 'BNB/USDT';
+      if (c === 'XRPUSDT') return 'XRP/USDT';
+      if (c === 'ADAUSDT') return 'ADA/USDT';
+      if (c === 'DOGEUSDT') return 'DOGE/USDT';
+      if (c === 'DOTUSDT') return 'DOT/USDT';
+      if (c === 'LTCUSDT') return 'LTC/USDT';
+      if (c === 'AVAXUSDT') return 'AVAX/USDT';
+      if (c === 'LINKUSDT') return 'LINK/USDT';
+      if (c === 'BTCUSD') return 'BTC/USD';
+      return c;
+    }
+
+    // Show balance from localStorage or default 1000
+    function showBalance() {
+      let bal = parseFloat(localStorage.getItem("balance"));
+      if (isNaN(bal)) {
+        bal = 1000.00;
+        localStorage.setItem("balance", bal.toFixed(2));
+      }
+      document.getElementById("userBalance").textContent = `$ ${bal.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}`;
+    }
+
+    // Dropdown toggle
     function toggleDropdown() {
       const menu = document.getElementById('dropdownMenu');
       const selectedText = document.getElementById('selectedCoin');
@@ -201,22 +205,65 @@
       selectedText.classList.toggle('text-green-400');
     }
 
+    // Select coin from dropdown
     function selectCoin(coin) {
       document.getElementById('selectedCoin').innerText = coin;
       document.getElementById('dropdownMenu').classList.add('hidden');
       document.getElementById('selectedCoin').classList.remove('text-green-400');
-
-      // Update modal coin name
       const modalCoinName = document.getElementById('modalCoinName');
-      if (modalCoinName) {
-        modalCoinName.textContent = coin;
-      }
+      if (modalCoinName) modalCoinName.textContent = coin;
+
+      updatePrice(coin);
     }
 
-    window.addEventListener('click', function (e) {
+    // Update price for selected coin (mock)
+    function updatePrice(coin) {
+      const mockPrices = {
+        'BTC/USDT': 29837.25,
+        'ETH/USDT': 1873.64,
+        'SOL/USDT': 42.15,
+        'BNB/USDT': 237.88,
+        'XRP/USDT': 0.63,
+        'ADA/USDT': 0.27,
+        'DOGE/USDT': 0.075,
+        'DOT/USDT': 6.4,
+        'LTC/USDT': 92.3,
+        'AVAX/USDT': 11.65,
+        'LINK/USDT': 7.34,
+        'BTC/USD': 29842.11
+      };
+      const price = mockPrices[coin] || 0;
+      document.getElementById('coinPrice').innerText = `$${price.toFixed(2)}`;
+    }
+
+    // Select time buttons style
+    function selectTime(el) {
+      const buttons = document.querySelectorAll('.time-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-green-500', 'text-white');
+        btn.classList.add('bg-white/10', 'text-gray-300');
+      });
+      el.classList.remove('bg-white/10', 'text-gray-300');
+      el.classList.add('bg-green-500', 'text-white');
+    }
+
+    // On page load
+    window.addEventListener('DOMContentLoaded', () => {
+      showBalance();
+
+      // Get coin from URL param
+      const params = new URLSearchParams(window.location.search);
+      const coinParam = params.get('coin');
+      const coin = formatCoin(coinParam);
+
+      selectCoin(coin);
+      updatePrice(coin);
+    });
+
+    // Close dropdown if clicked outside
+    window.addEventListener('click', function(e) {
       const dropdownButton = e.target.closest("button[onclick='toggleDropdown()']");
       const dropdownMenu = document.getElementById('dropdownMenu');
-
       if (!dropdownButton && !e.target.closest('#dropdownMenu')) {
         dropdownMenu.classList.add('hidden');
         document.getElementById('selectedCoin').classList.remove('text-green-400');
@@ -252,17 +299,6 @@
     openShortBtn.addEventListener('click', () => openModal('short'));
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', closeModal);
-
-    // Time selection logic
-    function selectTime(el) {
-      const buttons = document.querySelectorAll('.time-btn');
-      buttons.forEach(btn => {
-        btn.classList.remove('bg-green-500', 'text-white');
-        btn.classList.add('bg-white/10', 'text-gray-300');
-      });
-      el.classList.remove('bg-white/10', 'text-gray-300');
-      el.classList.add('bg-green-500', 'text-white');
-    }
   </script>
 </body>
 </html>
